@@ -54,7 +54,9 @@ Example FATDEL.G4B (hd0,0)/SUBDIR/ /s
 Example FATDEL.G4B (hd0,0)/SUBDIR/*.* /s /t
 Example FATDEL.G4B (rd)/SOMEDIR/FILENAME.EXT
 Example FATDEL.G4B (fd0)/SOMEDIR/FILE*.EX* /s
-Example FATDEL.G4B (fd0)/SOMEDIR/ /a:-drsh /s /r
+Example FATDEL.G4B (fd0)/IO.SYS
+Example FATDEL.G4B (fd0)/IO.SYS /r
+Example FATDEL.G4B (fd0)/SOMEDIR/ /a:-drsh /s
 Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
 Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t</code></pre>    
 
@@ -73,7 +75,15 @@ Example of trial-deleting all files in a directory with switch /t. Also use of a
 
 ![FATDEL G4B example of trial deleting directory with switch -t AND use of asterisk-wildcard AND confirm-dialog if really deleting all files in a directory I](https://github.com/user-attachments/assets/a1bd8a7f-9619-4221-8f95-f5268482f9a1)
 
-Example with switch /s to delete all files, in subdirectories too. Showed without and with asterisk wildcards for Name and Extension - with asterisk wildcards target directory remains (trial delete with switch /t)  
+Example with switch /s to delete all files, in subdirectories too. Showed without and with asterisk wildcards for Name and Extension - with asterisk wildcards target directory remains (trial delete with switch /t)
+
+![FATDEL G4B trial del with -s, without and with wildcards for name and extension - with target directory remains II](https://github.com/user-attachments/assets/1133f6c2-0352-4e58-a316-eeed692b8f86)
+
+Examples of deleting read-only files with dialog or with switch /r. Als showed with attributes in switch /a:sh and /a:r
+
+![FATDEL G4B examples of deleting read-only files with dialog or with switch -r AND with attributes in switch -a=sh and -a=r III](https://github.com/user-attachments/assets/9ea7c3f7-10f5-4567-aae3-b49ef1d6df83)
+
+
 
 ![FATDEL G4B trial del with -s, without and with wildcards for name and extension - with target directory remains II](https://github.com/user-attachments/assets/4a050b25-eea1-4bc1-a46d-abe76a5711b2)
 
