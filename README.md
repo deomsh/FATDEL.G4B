@@ -58,10 +58,20 @@ Example FATDEL.G4B (fd0)/SOMEDIR/ /a:-drsh /s /r
 Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
 Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t</code></pre>    
 
+#### ATTRIBFT.LLL
+
+Concept of 'Loosely Linked Library' is courtesy of Wonko the Sane (Jaclaz)  
+More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
+
 ### HISTORY
 Version 0.3  
 First published version
 
 ### SCREENSHOTS
+
+Example of trial-deleting all files in a directory with switch /t. Also use of asterisk-wildcard. And confirm-dialog if really deleting all files in a directory
+
+![FATDEL G4B example of trial deleting directory with switch -t AND use of asterisk-wildcard AND confirm-dialog if really deleting all files in a directory I](https://github.com/user-attachments/assets/a1bd8a7f-9619-4221-8f95-f5268482f9a1)
+
 
 
