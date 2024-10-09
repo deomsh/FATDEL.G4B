@@ -69,9 +69,12 @@ First published version
 
 ### SCREENSHOTS
 
-Example of trial-deleting all files in a directory with switch /t. Also use of asterisk-wildcard. And confirm-dialog if really deleting all files in a directory
+Example of trial-deleting all files in a directory with switch /t. Also use of asterisk-wildcard. And confirm-dialog if really deleting all files in a directory  
 
 ![FATDEL G4B example of trial deleting directory with switch -t AND use of asterisk-wildcard AND confirm-dialog if really deleting all files in a directory I](https://github.com/user-attachments/assets/a1bd8a7f-9619-4221-8f95-f5268482f9a1)
 
+Example with switch /s to delete all subdirectories, without and with asterisk wildcards for Name and Extension - with asterisk wildcards target directory remains (trial delete with switch /t)  
+
+![FATDEL G4B trial del with -s, without and with wildcards for name and extension - with target directory remains II](https://github.com/user-attachments/assets/4a050b25-eea1-4bc1-a46d-abe76a5711b2)
 
 
