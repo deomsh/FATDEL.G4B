@@ -45,7 +45,7 @@ File versions: Grubutil FAT >=15/02/2015, Grub4Dos 0.4.6a
  On FAT32 partition >= 4GB use Grubutil FAT from 2023, april or later
 Switch /lfn: Loosely Linked Library ATTRIBFT.LLL needed, in same folder as FATDEL.G4B
 Grub4dos for UEFI: compatible, but soon 'Out of malloc memory' errors
-Found not compatible with Grub4Dos 0.4.5b / Grub4Dos 0.4.5c && echo
+Found not compatible with Grub4Dos 0.4.5b / Grub4Dos 0.4.5c
 Deleting can be stopped by pressing Escape (not on Grub4dos for UEFI)
 More convenient => insmod DEVICE/PATH/FATDEL.G4B DEL (watch laoding FAT!)
 
