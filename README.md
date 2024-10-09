@@ -85,6 +85,3 @@ Examples of deleting read-only files with dialog or with switch /r. Als showed w
 
 
 
-![FATDEL G4B trial del with -s, without and with wildcards for name and extension - with target directory remains II](https://github.com/user-attachments/assets/4a050b25-eea1-4bc1-a46d-abe76a5711b2)
-
-
