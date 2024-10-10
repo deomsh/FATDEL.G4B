@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.3 (20241009)
+## FATDEL.G4B v0.3 (20241010)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -25,7 +25,8 @@ General Switches: /s /p /q /t /[-]x:~ /[-]y:~ /[-]r /z /lfn
 * Without FILENAME.EXT empty start-directory will be deleted (like DELTREE)
 * With /s and *.* as FILENAME.EXT, empty start-directory will not be deleted!
 **  Default verbose del: del and output messages too
-3* Instead of '~' max full 8.3 filename: other chars can be used
+3* Instead of '~' other chars: max full 8.3 filename (with /lfn max 16 chars)
+    /[-]y:~ can NOT filter PATH, if wildcard ends last directory of PATH
 4* If spaces or '=' on command-line use double quotes or escaped '\ ' or '\='
 
 FAT Directory Parser Switches*: /a:[-]darsh
@@ -47,7 +48,7 @@ Switch /lfn: Loosely Linked Library ATTRIBFT.LLL needed, in same folder as FATDE
 Grub4dos for UEFI: compatible, but soon 'Out of malloc memory' errors
 Found not compatible with Grub4Dos 0.4.5b / Grub4Dos 0.4.5c
 Deleting can be stopped by pressing Escape (not on Grub4dos for UEFI)
-More convenient => insmod DEVICE/PATH/FATDEL.G4B DEL (watch laoding FAT!)
+More convenient => insmod DEVICE/PATH/FATDEL.G4B DEL (watch loading FAT!)
 
 Example FATDEL.G4B (fd0)/SOMEDIR/
 Example FATDEL.G4B (hd0,0)/SUBDIR/ /s
@@ -78,6 +79,10 @@ Example of trial-deleting all files in a directory with switch /t. Also use of a
 Example with switch /s to delete all files, in subdirectories too. Showed without and with asterisk wildcards for Name and Extension - with asterisk wildcards target directory remains (trial delete with switch /t)
 
 ![FATDEL G4B trial del with -s, without and with wildcards for name and extension - with target directory remains II](https://github.com/user-attachments/assets/1133f6c2-0352-4e58-a316-eeed692b8f86)
+
+Example of trial del with asterisk wildcard in PATH and use of switch /y:CHARS, without and with switch /s
+
+![FATDEL G4B trial del with asterisk wildcard in PATH and use of switch -y=CHARS, without and with switch -s](https://github.com/user-attachments/assets/721c87c6-8d76-418f-9367-58c07f972f48)
 
 Examples of deleting read-only files with dialog or with switch /r. Als showed with attributes in switch /a:sh and /a:r
 
