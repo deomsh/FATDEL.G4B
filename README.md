@@ -34,7 +34,7 @@ FAT Directory Parser Switches*: /a:[-]darsh
 *  About max 35 000 files and 3 000 subdirectories in one directory
 ** Attributes are not shown by FAT
 ** FAT cannot delete read-only files and read-only directories: dialog or if /r is set
-** With /a:d only empty directories will be deleted (fake all with /s /t)
+** With /a:d only empty directories will be deleted (but all faked with /s /t)
 
 Remarks:
 Delete files on DEVICE; DEVICE is mandatory for safety reasons!
