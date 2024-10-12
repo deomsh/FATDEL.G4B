@@ -7,7 +7,7 @@ FATDEL.G4B /? (this text)
 * Except: <0x3000, 0x3001-0xD460, 0x12000-0x12FFF
 DEVICE = (fd#) & (hd#,#) & (0x#) & (#); FAT only!
 /PATH/ = starting directory => without PATH => on ROOT
-Last DIR in PATH accepts wildcard: '*' in Name and Extension (NOT: '?' )
+Last DIR in PATH accepts wildcard: '*' in Name and Extension both (NOT: '?' )
 FILENAME[.EXT] = del specified file => on ROOT without /PATH/
 FILENAME[.EXT] accepts wildcard: '*' in Name and Extension (NOT: '?' )
 Without FILENAME[.EXT] full directory will be deleted (*.* is NOT needed)*
@@ -26,7 +26,7 @@ General Switches: /s /p /q /t /[-]x:~ /[-]y:~ /[-]r /z /lfn
 * With /s and *.* as FILENAME.EXT, empty start-directory will not be deleted!
 **  Default verbose del: del and output messages too
 3* Instead of '~' other chars: max full 8.3 filename (with /lfn max 16 chars)
-    /[-]y:~ can NOT filter PATH, if wildcard ends last directory of PATH
+    /[-]y:~ can NOT filter PATH, if wildcard(s) are in last directory of PATH
 4* If spaces or '=' on command-line use double quotes or escaped '\ ' or '\='
 
 FAT Directory Parser Switches*: /a:[-]darsh
@@ -88,5 +88,8 @@ Examples of deleting read-only files with dialog or with switch /r. Als showed w
 
 ![FATDEL G4B examples of deleting read-only files with dialog or with switch -r AND with attributes in switch -a=sh and -a=r III](https://github.com/user-attachments/assets/9ea7c3f7-10f5-4567-aae3-b49ef1d6df83)
 
+Example of use of switch /lfn, with trial del /s and /y:sys
+
+![FATDEL G4B trial del with switch -lfn and -s and -y=sys](https://github.com/user-attachments/assets/fd193f3d-e4f9-4f9c-b249-89fe06da5487)
 
 
