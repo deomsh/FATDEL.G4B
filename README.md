@@ -92,7 +92,7 @@ Example of use of switch /lfn, with trial del /s and /y:sys
 
 ![FATDEL G4B trial del with switch -lfn and -s and -y=sys](https://github.com/user-attachments/assets/fd193f3d-e4f9-4f9c-b249-89fe06da5487)
 
-Example of use of switch /lfn with spaces or '=' on command-line (trial del). Watch case of missing extension wildcard in the middle of the print-screen!
+Example of use of switch /lfn with spaces or '=' on command-line (trial del). Watch case of missing extension wildcard in the middle of the print-screen (filesize 0!)
 
 ![FATDEL G4B use of switch -lfn with spaces or '=' on command-line](https://github.com/user-attachments/assets/7fea6c7c-968b-4b4c-95b4-dec9d063337e)
 
