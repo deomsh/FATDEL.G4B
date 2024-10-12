@@ -96,3 +96,6 @@ Example of use of switch /lfn with spaces or '=' on command-line (trial del). Wa
 
 ![FATDEL G4B use of switch -lfn with spaces or '=' on command-line](https://github.com/user-attachments/assets/7fea6c7c-968b-4b4c-95b4-dec9d063337e)
 
+Speeds of del: looptest of deleting 1459 files, without and with switch /lfn (in Windows 10 about 5 seconds)
+
+![FATDEL G4B looptest of deleting 1459 files, without and with switch -lfn (in Windows 10 5 seconds)](https://github.com/user-attachments/assets/da1c00a3-bbb7-4183-a174-6ca28ef6af3d)
