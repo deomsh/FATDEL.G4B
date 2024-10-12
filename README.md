@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.3 (20241010)
+## FATDEL.G4B v0.3 (20241012)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -82,7 +82,7 @@ Example with switch /s to delete all files, in subdirectories too. Showed withou
 
 Example of trial del with asterisk wildcard in PATH and use of switch /y:CHARS, without and with switch /s
 
-![FATDEL G4B trial del with asterisk wildcard in PATH and use of switch -y=CHARS, without and with switch -s](https://github.com/user-attachments/assets/721c87c6-8d76-418f-9367-58c07f972f48)
+![FATDEL G4B trial del with asterisk wildcards in PATH and use of switch -y and without and with switch -s](https://github.com/user-attachments/assets/96714f94-107f-4822-abe4-c856d15d110b)
 
 Examples of deleting read-only files with dialog or with switch /r. Als showed with attributes in switch /a:sh and /a:r
 
