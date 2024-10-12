@@ -1,5 +1,5 @@
 !BAT
-#-#+ FATDEL.G4B v0.3 (20241010), by deomsh. Based on copyFF.bat (:cpa & :copyfiles & :sub-dir => originator of call's seems to be Chenall)
+#-#+ FATDEL.G4B v0.3 (20241012), by deomsh. Based on copyFF.bat (:cpa & :copyfiles & :sub-dir => originator of call's seems to be Chenall)
 if "%~1"=="" && call :help "smallhelp" && goto :eof
 setlocal && set *
 debug status | set debugsts= ;; set "debugsts=%debugsts:~-1,1%" ;; debug 1 ;; debug msg=1
@@ -20,7 +20,7 @@ set "ARG=%~pnx1"
 set "root=%@root%"
 set /l sdev=%~d1 &; root %sdev% > nul || echo && echo Device does not exist && echo && set result=0 && goto :eov
 root %root% > nul
-delmod -l fat > nul || insmod (bd)/fat > nul || insmod (bd)/boot/grub/fat > nul || insmod (bd)/grub/fat > nul || insmod (bd)/g4dll/fat > nul || insmod /fat > nul || insmod /boot/grub/fat > nul || insmod /grub/fat > nul || insmod /g4dll/fat > nul || echo Abort: Grubutil FAT not found => FATDEL.G4B /? for help && set result=0 && goto :exit
+delmod -l fat > nul || insmod %batchsrc%fat > nul || insmod (bd)/fat > nul || insmod (bd)/boot/grub/fat > nul || insmod (bd)/grub/fat > nul || insmod (bd)/g4dll/fat > nul || insmod /fat > nul || insmod /boot/grub/fat > nul || insmod /grub/fat > nul || insmod /g4dll/fat > nul || echo Abort: Grubutil FAT not found => FATDEL.G4B /? for help && set result=0 && goto :exit
 fat info %sdev% > nul || echo Target %sdev% is not a valid FAT device && set result=0 && goto :eov
 set "sdir=%~p1"
 set "sdir=%sdir:~0,-1%"
@@ -29,9 +29,9 @@ set "name1=%~n1"
 set "ext1=%~x1"
 if "%name1%"=="*" && if "%ext1%"==".*" && set delsrc=N
 if exist name1 &; call Fn.11 "%name1%" "?" && echo Wildcard '?' not supported && set result=0 && goto :eov
-if exist name1 &; call Fn.11 "%name1%" "*" && call :prsname1
+if exist name1 &; call :prsname1
 if exist ext1 &; call Fn.11 "%ext1%" "?" && echo Wildcard '?' not supported && set result=0 && goto :eov
-if exist ext1 &; call Fn.11 "%ext1%" "*" && call :prsext1
+if exist ext1 &; call :prsext1
 if exist wcn && set file=1
 if exist wcx && set file=1
 if exist wcx && if exist wcn && if "%name1%"=="*" && if "%ext1%"=="*" && set file=
@@ -64,12 +64,12 @@ if exist x && set file=1
 if not exist sdir && goto :parsedir
 if not "%sdir:~0,1%"=="/" && set "sdir=/%sdir%"
 if "%sdir:~-1,1%"=="/" && set sdir=%sdir:~0,-1%
-echo -e "%sdir%" | set sdir= &; set "sdir=%sdir:~1,-1%" &; call Fn.11 "%sdir%" "\x20" && echo -n > (md)%mdmem%+1 && pause --wait=0 "%sdir%" > (md)%mdmem%+1 && cat --locate=\x22 --replace=\x0A --length=1 (md)%mdmem%+1 > nul && cat --locate=\x22\x0A\x00 --replace=\x0A\x00\x00 (md)%mdmem%+1 > nul && call :lsspaces &; cat (md)%mdmem%+1 | set sdir=
-call Fn.11 "%sdir:~0,-1%" "*" && echo && echo Abort: wilcard only '*' allowed only as last char in last directory in PATH && echo && set result=0 && goto :eov
-call Fn.11 "%sdir:~-1,1%" "*" && set dirwcn=Y
-echo -n > (md)%mdmem%+1 && pause --wait=0 "%sdir%" > (md)%mdmem%+1 && cat --locate=\x22 --replace=\x0A --length=1 (md)%mdmem%+1 > nul && cat --locate=\x22\x0A\x00 --replace=\x0A\x00\x00 (md)%mdmem%+1 > nul && cat --skip=1 --locate=/ --replace=\x20 --length=1 (md)%mdmem%+1 > nul
-## Check last directory in path for '*'
-setlocal && cat (md)%mdmem%+1 | call :parsesd &; endlocal && set sdir=%sdir% && set dirname1=%dirname1% && set dirwcn=%dirwcn% && set dirext1=%dirext1% && set dirwcx=%dirwcx% && set dir=%dir% && set deldir=%deldir%
+setlocal
+call Fn.11 "%sdir:~-1,1%" "*" && set dir=1 && echo -n > (md)%mdmem%+1 && pause --wait=0 "%sdir:~0,-1%" > (md)%mdmem%+1 && cat --locate=\x22\x0A\x00 --replace=\x0A\x00\x00 (md)%mdmem%+1 > nul && cat --locate=/ (md)%mdmem%+1 > nul &; set /a pathlen=%?% > nul &; cat --skip=%pathlen% --locate=/ --replace=\x22 --length=1 (md)%mdmem%+1 > nul && set /a pathlen=%pathlen%+1 > nul &; cat --length=%pathlen% (md)%mdmem%+1 | set sdir= &; set "sdir=%sdir:~1,-1%" &; cat --skip=%pathlen% --locate=. (md)%mdmem%+1 > nul && set dirwcx=* ! set dirwcn=* &; if %dirwcn%==* && cat --skip=%pathlen% (md)%mdmem%+1 | set dirname1= ! set dirwcn= &; if %dirwcx%==* && cat --skip=%pathlen% --locate=. (md)%mdmem%+1 > nul &; set /a namelen=%?%-%pathlen% > nul &; cat --skip=%pathlen% --length=%namelen% (md)%mdmem%+1 | set dirname1= && set /a skiplen=%pathlen%+%namelen% > nul &; cat --skip=%skiplen% --locate=\x0A (md)%mdmem%+1 > nul &; set /a extlen=%?%-%skiplen% > nul &; cat --skip=%skiplen% (md)%mdmem%+1 | set dirext1= &; if "%dirname1:~-1,1%"=="*" && set "dirname1=%dirname1:~0,-1%"
+#DEBUG#call Fn.11 "%sdir:~-1,1%" "*" && set dir=1 && echo -n > (md)%mdmem%+1 && pause --wait=0 "%sdir:~0,-1%" > (md)%mdmem%+1 && cat --hex --length=32 (md)%mdmem%+1 && cat --locate=\x22\x0A\x00 --replace=\x0A\x00\x00 (md)%mdmem%+1 > nul && echo && cat --hex --length=32 (md)%mdmem%+1 && cat --locate=/ (md)%mdmem%+1 > nul &; set /a pathlen=%?% > nul &; echo pathlen=%pathlen% && cat --skip=%pathlen% --locate=/ --replace=\x22 --length=1 (md)%mdmem%+1 > nul && echo && cat --hex --length=32 (md)%mdmem%+1 && set /a pathlen=%pathlen%+1 > nul &; cat --length=%pathlen% (md)%mdmem%+1 | set sdir= &; set "sdir=%sdir:~1,-1%" &; echo sdir=%sdir% && cat --skip=%pathlen% --locate=. (md)%mdmem%+1 > nul && set dirwcx=* ! set dirwcn=* &; if %dirwcn%==* && cat --skip=%pathlen% (md)%mdmem%+1 | set dirname1= ! set dirwcn= &; if %dirwcx%==* && cat --skip=%pathlen% --locate=. (md)%mdmem%+1 > nul &; set /a namelen=%?%-%pathlen% > nul &; echo namelen=%namelen% && cat --skip=%pathlen% --length=%namelen% (md)%mdmem%+1 | set dirname1= && set /a skiplen=%pathlen%+%namelen% > nul &; cat --skip=%skiplen% --locate=\x0A (md)%mdmem%+1 > nul &; set /a extlen=%?%-%skiplen% > nul &; echo skiplen=%skiplen% extlen=%extlen% && cat --hex --skip=%skiplen% --length=%extlen% (md)%mdmem%+1 && cat --skip=%skiplen% (md)%mdmem%+1 | set dirext1= &; if "%dirname1:~-1,1%"=="*" && set "dirname1=%dirname1:~0,-1%"
+endlocal && set "sdir=%sdir%" && set "dirname1=%dirname1%" && set "dirext1=%dirext1%" && set dir=%dir%
+call Fn.11 "%sdir%" "*" && echo && echo Abort: wilcard '*' only allowed in last directory in PATH && echo && set result=0 && goto :eov
+echo -n > (md)%mdmem%+1
 set path=
 ## Clean (md)%mdmem%+1
 echo -n > (md)%mdmem%+1
@@ -99,11 +99,11 @@ set sdev=
 if exist a && call :parseatt &; call Fn.11 "%a%" "-r" || call Fn.11 "%a%" "r" && set r=/r
 ## FAT dir based directory-parsing only
 set callsect=256
-#OLD#if exist c && if %c%>=1 && set /A callsect=%c% > nul ! set callsect=256
+#notanymore#if exist c && if %c%>=1 && set /A callsect=%c% > nul ! set callsect=256
 set cd=
 set parsesec=4095
-#OLD#if %n%>=4096 echo && echo /n:%n% is too high && set result=0 && goto :eov
-#OLD#if %n%>=1 && set /A parsesec=%n%+1 > nul ! set parsesec=4095
+#notanymore#if %n%>=4096 echo && echo /n:%n% is too high && set result=0 && goto :eov
+#notanymore#if %n%>=1 && set /A parsesec=%n%+1 > nul ! set parsesec=4095
 ## Clean memdrive
 setlocal && call :cleanmd &; endlocal
 call :fdcpa
@@ -145,12 +145,13 @@ call Fn.11 "%ext%" "%~1" && set SFN=N && goto :eof
 if "%~2"=="" && goto :eof ! shift && goto :lfnchar
 ::
 :parsesd
-set path= && set name1= && set ext1= && set wcn= && set wcx= && set sdir=
+set path= && set name1= && set ext1= && set wcn= && set wcx= && set sdir= && set dirwcn=
 set "root=%@root%" && root %sdev%/ > nul
 set path=%~p1
 %root% > nul
 set name1=%~n1
 set ext1=%~x1
+echo %0 name1=%name1% ext1=%ext1%
 :testwc
 ## Check for * in name1/ext1
 if exist name1 && call :prsname1
@@ -158,6 +159,7 @@ if "%wcn%"=="*" && set "dirname1=%name1%" && set "dirwcn=%wcn%" && set dir=1
 if exist ext1 && call :prsext1
 if "%wcx%"=="*" && set "dirext1=%ext1%" && set "dirwcx=%wcx%" && set dir=1
 set "sdir=%path%"
+echo %0 dirname1=%dirname1% dirext1=%dirext1%
 if exist dirwcn && if not exist dirwcx && set "dirwcx=*"
 if exist dirwcx && if not exist dirwcn && set "dirwcn=*"
 if not exist dirwcn && if not exist dirwcx && set "sdir=%path%%%name1%%%ext1%" && set dir=
@@ -176,9 +178,9 @@ goto :loopmd
 :fdcpa
 ## No directory-parsing first (apparently)
 :fdfiles
-##OLD##if %parsedir%==1 && goto :fdsubs
-##OLD##if exist a && if exist s &; call Fn.11 "%a%" "-d" |; call Fn.11 "%a%" "d" && goto :fdsubs
-##OLD##if %a:~0,1%==d && goto :fdsubs
+#notanymore#if %parsedir%==1 && goto :fdsubs
+#notanymore#if exist a && if exist s &; call Fn.11 "%a%" "-d" |; call Fn.11 "%a%" "d" && goto :fdsubs
+#notanymore#if %a:~0,1%==d && goto :fdsubs
 set subdir=0
 if exist file && set showdir=1
 set deldir=
@@ -254,7 +256,7 @@ setlocal && set * && call :lastkey "Esc" &; if not %lastkey%==0x51 && if not %la
 if not exist file && if "%~1"=="" && if %s%==/s && if exist dir && set gotomsg= && setlocal &; if exist lfndir && call :testydir "goto :eof" "set cd=%lfnsrc%" ! call :testydir "goto :eof" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
 if not exist file && if "%~1"=="" && if %s%==/s && if exist y && set gotomsg= && setlocal &; if exist lfndir && call :testydir "goto :eof" "set cd=%lfnsrc%" ! call :testydir "goto :eof" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
 ## Problem: with /dir/d* /s also source-directory will be deleted (if empty?)
-## Oke with set /a deldir=1 in setlocal + if exist dirwcn && set /a delfiles=0 at start
+## Oke with set /a deldir=1 in setlocal , NONEED: if exist dirwcn && set delfiles=0 at start
 if exist deldir && if not exist file && if not exist dir && if %t%==/t && if exist s && if exist ybak && if not "%ybak:~1,1%"=="-" &; if not "%~1"=="" if not "%~2"=="" if not "%~3"=="" |; fat dir %source%%%cd% > nul && set gotomsg= &; setlocal && set y=%ybak% &; if exist lfndir && call :testydir "set noyfound=Y" "set cd=%lfnsrc%" ! call :testydir "set noyfound=Y" "set cd=%source%%%cd%" &; endlocal && set "gotomsg=%gotomsg%" &; if not exist gotomsg && set ybak= ! %gotomsg%
 if exist a && if not exist file && if not exist dir && if "%~1"=="" && if %s%==/s && if %deldir%==1 && if %subdir%==1 &; call Fn.11 "%a%" "-d" &; goto :eof
 if not exist file && if not exist dir && if "%~1"=="" && if %s%==/s && if not exist cd && if %deldir%==1 && if %subdir%==1 && if not exist noyfound && if %delsrc%==N && goto :eof
@@ -279,7 +281,7 @@ set "arg=%~1" &; if "%arg:~2,1%"==":" && set time=%arg% && shift
 set "arg=%~1" &; if "%arg:~0,1%"=="<" && if "%arg:~-1,1%"==">" && set /u "sfndir=%arg:~1,-1%"
 set "argname=%~n1" &; if "%argname:~0,1%"=="<" && set /u "argname=%argname:~1%" ;; if "%argname:~-1,1%"==">" && set /u "argname=%argname:~0,-1%"
 set "argext=%~x1" &; if "%argext:~-1,1%"==">" && set /u "argext=%argext:~0,-1%" ;; if "%argext:~0,1%"=="<" && set /u "argext=%argext:~1%"
-## One more shift if filesize is in KB (if filesize >= 1MB) 
+## One more shift if filesize is in KB (if filesize >= 1MB)
 ## Parse asterisk wildcard in last directory of PATH
 ## Find empty directories to delete
 errorcheck off
@@ -293,18 +295,14 @@ if exist sfndir && if not exist emptydir && if exist y && if not exist s && if n
 if %subdir%==1 && if exist sfndir && if not exist dirname1 && if not exist dirext1 && if not exist emptydir && if exist y && if exist s && if "%y:~1,1%"=="-" && set gotomsg= && setlocal &; if exist lfndir && set "cd=%lfndir%" ! set cd=%sfndir% &; set gotomsg= && call :testydir "set noyfound=Y && goto :skipcopy" &; endlocal && set "gotomsg=%gotomsg%"
 if %subdir%==1 && if exist y && if exist s && if not exist dirname1 && if not exist dirext1 && if "%y:~1,1%"=="-" &; if exist gotomsg && %gotomsg%
 if exist sfndir && if not exist emptydir && if %subdir%==1 && if %s%==/s && fat dir %source%%%cd%/%sfndir% > nul && goto :fdsubdir
-if not exist sfndir && if exist dirname1 && set gotomsg= &; setlocal && set name1=%dirname1% && set wcn=%dirwcn% && set ext1= && set wcx= &; if exist lfnsrc && call :testzdir "goto :skipcopy" "set cd=%lfnsrc%" ! call :testzdir "goto :skipcopy" "set cd=%source%%%cd%" &; endlocal && set "gotomsg=%gotomsg%"
-if not exist sfndir && if exist dirname1 &; %gotomsg%
-if not exist sfndir && if exist dirext1 && set gotomsg= &; setlocal && set ext1=%dirext1% && set wcx=%dirwcx% && set name1= && set wcn= &; if exist lfnsrc && call :testzdir "goto :skipcopy" "set cd=%lfnsrc%" ! call :testzdir "goto :skipcopy" "set cd=%source%%%cd%" &; endlocal && set "gotomsg=%gotomsg%"
-if not exist sfndir && if exist dirext1 &; %gotomsg%
-if exist emptydir && if exist sfndir && if exist y && if not "%y:~1,1%"=="-" && setlocal &; if exist lfndir && set "cd=%lfndir%" ! set cd=%sfndir% &; set gotomsg= && call :testydir "goto :skipcopy" &; endlocal && set "gotomsg=%gotomsg%"
-if exist emptydir && if exist sfndir && if exist y && if "%y:~1,1%"=="-" && setlocal &; if exist lfndir && set "cd=%lfndir%" ! set cd=%sfndir% &; set gotomsg= && call :testydir "set noyfound=Y && goto :skipcopy" &; endlocal && set "gotomsg=%gotomsg%"
-if exist y &; if exist gotomsg && %gotomsg%
+if not exist sfndir && if exist dirname1 && set gotomsg= &; setlocal && set name1=%dirname1% && set ext1= &; if exist lfnsrc && call :testzdir "goto :skipcopy" "set cd=%lfnsrc%" ! call :testzdir "goto :skipcopy" "set cd=%source%%%cd%" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg &; %gotomsg%
+if not exist sfndir && if exist dirext1 && set gotomsg= &; setlocal && set ext1=%dirext1% && set name1= &; if exist lfnsrc && call :testzdir "goto :skipcopy" "set cd=%lfnsrc%" ! call :testzdir "goto :skipcopy" "set cd=%source%%%cd%" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
+if exist emptydir && if exist sfndir && if exist y && if not "%y:~1,1%"=="-" && setlocal &; if exist lfndir && set "cd=%lfndir%" ! set cd=%sfndir% &; set gotomsg= && call :testydir "goto :skipcopy" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
+if exist emptydir && if exist sfndir && if exist y && if "%y:~1,1%"=="-" && setlocal &; if exist lfndir && set "cd=%lfndir%" ! set cd=%sfndir% &; set gotomsg= && call :testydir "set noyfound=Y && goto :skipcopy" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
 if not exist sfndir && if exist y && if not "%y:~1,1%"=="-" && goto :skipcopy
 if not exist emptydir && if exist sfndir && if exist y && if not %y:~1,1%==- && set noyfound=Y && goto :skip
-if exist sfndir && if exist dirname1 && goto :skip
-if exist sfndir && if exist dirext1 && goto :skip
-if %delfiles%==0 && goto :skipcopy
+if exist sfndir &; if exist dirname1 && goto :skip ! if exist dirext1 && goto :skip
+#NONEED#if %delfiles%==0 && goto :skipcopy
 if exist a && if exist sfndir &; call Fn.11 "%a%" "-d" && goto :skipcopy
 ## Test for FAT dir zero-byte files
 set /a argafter=%~2 > nul
@@ -347,8 +345,8 @@ if not %t%==/t && if not exist sfndir && if exist %source%%%cd%/%arg% &; fat del
 if %delagain%==Y && errorcheck off
 if not %t%==/t && if %delagain%==Y && if exist emptydir && if %subdir%==0 &; fat dir %emptydir% > nul &; fat del %emptydir% > nul || echo Error deleting %source%%%cd%%%arg% && set /a fcf=%fcf%+1 > nul && goto :skipcopy
 if not %t%==/t && if %delagain%==Y && if not exist sfndir && if exist %source%%%cd%/%arg% &; fat del %source%%%cd%/%arg% > nul || echo Error deleting %source%%%cd%/%arg% && set /a fcf=%fcf%+1 > nul && goto :skipcopy
-if not %t%==/t && if exist LFN && if exist lfnarg &; if exist emptydir && if %subdir%==0 && setlocal && echo %act%del directory LFN:$[0x00]"$[]%lfnarg%  $[0x08]%emptydir%$[0x00]" %NULL% && ATTRIBFT.LLL dellfn "%source%%%cd%/%lfnarg%" &; if exist result && endlocal && set /a lfndel=%lfndel%+1 > nul ! echo $[0x00]"$[]%message%$[0x00]" && endlocal && set /a lfndelsk=%lfndelsk%+1 > nul && set /a lfndel=%lfndel%-1 > nul &; set lfnarg=
-if not %t%==/t && if exist LFN && if exist lfnarg &; if not exist sfndir && setlocal && echo %act%del file LFN:$[0x00]"$[]%lfnarg%  $[0x08]%arg%$[0x00]" %NULL% && ATTRIBFT.LLL dellfn "%source%%%cd%/%lfnarg%" &; if exist result && endlocal && set /a lfndel=%lfndel%+1 > nul ! echo $[0x00]"$[]%message%$[0x00]" && endlocal && set /a lfndelsk=%lfndelsk%+1 > nul && set /a lfndel=%lfndel%-1 > nul &; set lfnarg=
+if not %t%==/t && if exist LFN && if exist lfnarg &; if exist emptydir && if %subdir%==0 && setlocal && echo %act%del directory LFN:$[0x00]"$[]%lfnarg%$[0x00]" %NULL% && ATTRIBFT.LLL dellfn "%source%%%cd%/%lfnarg%" &; if exist result && endlocal && set /a lfndel=%lfndel%+1 > nul ! echo $[0x00]"$[]%message%$[0x00]" && endlocal && set /a lfndelsk=%lfndelsk%+1 > nul && set /a lfndel=%lfndel%-1 > nul &; set lfnarg=
+if not %t%==/t && if exist LFN && if exist lfnarg &; if not exist sfndir && setlocal && echo %act%del file LFN:$[0x00]"$[]%lfnarg%$[0x00]" %NULL% && ATTRIBFT.LLL dellfn "%source%%%cd%/%lfnarg%" &; if exist result && endlocal && set /a lfndel=%lfndel%+1 > nul ! echo $[0x00]"$[]%message%$[0x00]" && endlocal && set /a lfndelsk=%lfndelsk%+1 > nul && set /a lfndel=%lfndel%-1 > nul &; set lfnarg=
 :floopend
 if exist sfndir && if exist emptydir && if %subdir%==0 && set /a msds=%msds%+1 > nul && set /a lmsds=%lmsds%+1 > nul && goto :skip
 if exist sfndir && goto :skip
@@ -360,7 +358,7 @@ shift
 ## One more shift if filesize is in KB (if filesize >= 1MB)
 #DEBUG#if /i "%~2"=="KB" && pause argsize=%argsize% %^2=%2 && shift
 if /i "%~2"=="KB" && shift
-#IMPOSSIBLE#if /i "%2:~0,1"=="K" && shift
+#BAD#if /i "%2:~0,1"=="K" && shift
 :skip
 ## Shift to first new filedate. After a directory only one shift - no size
 if "%~1"=="" || shift
@@ -373,10 +371,8 @@ set noyfound=
 ## Reset local counters at start of :fdsubdir needed again
 set lfcs=0 && set lfcf=0 && set lmsds=0 && set lcopybyt=0 && set lsdsk=0
 if exist LFN && if not exist lfndir && setlocal && ATTRIBFT.LLL getlfn "%source%%%cd%/%sfndir%" &; if exist result && endlocal && set "lfndir=%result%" ! endlocal
-if exist dirname1 && set gotomsg= &; setlocal && set name1=%dirname1% && set wcn=%dirwcn% && set ext1= && set wcx= &; if exist lfndir && call :testzdir "goto :fdendloc" "set cd=%lfndir%" ! call :testzdir "goto :fdendloc" "set cd=%sfndir%" &; endlocal && set "gotomsg=%gotomsg%"
-if exist dirname1 &; if exist gotomsg && %gotomsg%
-if exist dirext1 && set gotomsg= &; setlocal && set ext1=%dirext1% && set wcx=%dirwcx% && set name1= && set wcn= &; if exist lfndir && call :testzdir "goto :fdendloc" "set cd=%lfndir%" ! call :testzdir "goto :fdendloc" "set cd=%sfndir%" &; endlocal && set "gotomsg=%gotomsg%"
-if exist dirext1 &; if exist gotomsg && %gotomsg%
+if exist dirname1 &; set gotomsg= &; setlocal && set name1=%dirname1% && set ext1= &; if exist lfndir && call :testzdir "goto :fdendloc" "set cd=%lfndir%" ! call :testzdir "goto :fdendloc" "set cd=%sfndir%" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
+if exist dirext1 &; set gotomsg= &; setlocal && set ext1=%dirext1% && set name1= &; if exist lfndir && call :testzdir "goto :fdendloc" "set cd=%lfndir%" ! call :testzdir "goto :fdendloc" "set cd=%sfndir%" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
 if exist y && if not "%y:~1,1%"=="-" && if not exist dirname1 && if not exist dirext1 && set gotomsg= && setlocal &; if exist lfndir && call :testydir "goto :fskipmld" "set cd=%lfndir%" ! call :testydir "goto :fskipmld" "set cd=%sfndir%" &; endlocal && set "gotomsg=%gotomsg%" &; if exist gotomsg && %gotomsg%
 ## Set max length command-line with room for one filename (to avoid Error 30: run-out-of-stack)
 ## Needed: after cd a "/"
@@ -390,10 +386,11 @@ if not exist y && if exist ybak && set ybak=/y:%sfndir%
 if not exist dirname1 && if not exist dirext1 && if exist y && if not "%y:~1,1%"=="-" && set ybak=%y% && set y=
 set dir=
 :fskipmld
-if exist LFN &; if exist lfndir && set "lfnsrc=%lfnsrc%/%lfndir%" ! set "lfnsrc=%lfnsrc%/%sfndir%"
+if exist LFN &; if exist lfndir && set "lfnsrc=%lfnsrc%/%lfndir%" ! set "lfnsrc=%lfnsrc%/%sfndir%" &; set lfndir=
+#BAD#if exist LFN &; if exist lfndir && set "lfnsrc=%lfnsrc%/%lfndir%" ! set "lfnsrc=%lfnsrc%/%sfndir%"
 if not exist dirname1 if not exist dirext1 || set source=%source%/%sfndir%
 if not exist dirname1 && if not exist dirext1 && set "cd=%cd%/%sfndir%"
-set dirname1= && set dirwcn= && set delfiles= && set dirext1= && set dirwcx=
+set dirname1= && set dirext1=
 call :fdcpa
 :fdendloc
 ## Preserve Total output-counters
@@ -403,30 +400,34 @@ goto :fdcopy
 ::
 :prsname1
 setlocal
-call Fn.11 "%name1%" "\x20" && echo -e "%name1%" | set name1= &; set "name1=%name1:~1,-1%"
-if "%name1:~0,1%"=="*" && endlocal && set "name1=*" && set "wcn=*" && goto :eof
-if "%name1:~16,1%"=="*" && endlocal && set "name1=%name1:~0,16%" && set "wcn=*" && goto :eof
-if "%name1:~15,1%"=="*" && endlocal && set "name1=%name1:~0,15%" && set "wcn=*" && goto :eof
-if "%name1:~14,1%"=="*" && endlocal && set "name1=%name1:~0,14%" && set "wcn=*" && goto :eof
-if "%name1:~13,1%"=="*" && endlocal && set "name1=%name1:~0,13%" && set "wcn=*" && goto :eof
-if "%name1:~12,1%"=="*" && endlocal && set "name1=%name1:~0,12%" && set "wcn=*" && goto :eof
-if "%name1:~11,1%"=="*" && endlocal && set "name1=%name1:~0,11%" && set "wcn=*" && goto :eof
-if "%name1:~10,1%"=="*" && endlocal && set "name1=%name1:~0,10%" && set "wcn=*" && goto :eof
-if "%name1:~9,1%"=="*" && endlocal && set "name1=%name1:~0,9%" && set "wcn=*" && goto :eof
-if "%name1:~8,1%"=="*" && endlocal && set "name1=%name1:~0,8%" && set "wcn=*" && goto :eof
-if "%name1:~7,1%"=="*" && endlocal && set "name1=%name1:~0,7%" && set "wcn=*" && goto :eof
-if "%name1:~6,1%"=="*" && endlocal && set "name1=%name1:~0,6%" && set "wcn=*" && goto :eof
-if "%name1:~5,1%"=="*" && endlocal && set "name1=%name1:~0,5%" && set "wcn=*" && goto :eof
-if "%name1:~4,1%"=="*" && endlocal && set "name1=%name1:~0,4%" && set "wcn=*" && goto :eof
-if "%name1:~3,1%"=="*" && endlocal && set "name1=%name1:~0,3%" && set "wcn=*" && goto :eof
-if "%name1:~2,1%"=="*" && endlocal && set "name1=%name1:~0,2%" && set "wcn=*" && goto :eof
-if "%name1:~1,1%"=="*" && endlocal && set "name1=%name1:~0,1%" && set "wcn=*" && goto :eof
+echo -e "%name1%" | set name1= &; set "name1=%name1:~1,-1%"
+#NotFor'='#call Fn.11 "%name1%" "\x20" && echo -e "%name1%" | set name1= &; set "name1=%name1:~1,-1%"
+call Fn.11 "%name1%" "*" || endlocal && set "name1=%name1%" && set wcn= && goto :eof
+if "%name1:~0,1%"=="*" && endlocal && set "name1=*" && set wcn=* && goto :eof
+if "%name1:~16,1%"=="*" && endlocal && set "name1=%name1:~0,16%" && set wcn=* && goto :eof
+if "%name1:~15,1%"=="*" && endlocal && set "name1=%name1:~0,15%" && set wcn=* && goto :eof
+if "%name1:~14,1%"=="*" && endlocal && set "name1=%name1:~0,14%" && set wcn=* && goto :eof
+if "%name1:~13,1%"=="*" && endlocal && set "name1=%name1:~0,13%" && set wcn=* && goto :eof
+if "%name1:~12,1%"=="*" && endlocal && set "name1=%name1:~0,12%" && set wcn=* && goto :eof
+if "%name1:~11,1%"=="*" && endlocal && set "name1=%name1:~0,11%" && set wcn=* && goto :eof
+if "%name1:~10,1%"=="*" && endlocal && set "name1=%name1:~0,10%" && set wcn=* && goto :eof
+if "%name1:~9,1%"=="*" && endlocal && set "name1=%name1:~0,9%" && set wcn=* && goto :eof
+if "%name1:~8,1%"=="*" && endlocal && set "name1=%name1:~0,8%" && set wcn=* && goto :eof
+if "%name1:~7,1%"=="*" && endlocal && set "name1=%name1:~0,7%" && set wcn=* && goto :eof
+if "%name1:~6,1%"=="*" && endlocal && set "name1=%name1:~0,6%" && set wcn=* && goto :eof
+if "%name1:~5,1%"=="*" && endlocal && set "name1=%name1:~0,5%" && set wcn=* && goto :eof
+if "%name1:~4,1%"=="*" && endlocal && set "name1=%name1:~0,4%" && set wcn=* && goto :eof
+if "%name1:~3,1%"=="*" && endlocal && set "name1=%name1:~0,3%" && set wcn=* && goto :eof
+if "%name1:~2,1%"=="*" && endlocal && set "name1=%name1:~0,2%" && set wcn=* && goto :eof
+if "%name1:~1,1%"=="*" && endlocal && set "name1=%name1:~0,1%" && set wcn=* && goto :eof
 endlocal
 goto :eof
 ::
 :prsext1
 setlocal
-call Fn.11 "%ext1%" "\x20" && echo -e "%ext1%" | set ext1= &; set "ext1=%ext1:~1,-1%"
+echo -e "%ext1%" | set ext1= &; set "ext1=%ext1:~1,-1%"
+#NotFor'='#call Fn.11 "%ext1%" "\x20" && echo -e "%ext1%" | set ext1= &; set "ext1=%ext1:~1,-1%"
+call Fn.11 "%ext1%" "*" || endlocal && set "ext1=%ext1%" && set wcx= && goto :eof
 if "%ext1:~1,1%"=="*" && endlocal && set ext1=* && set wcx=* && goto :eof
 if "%ext1:~2,1%"=="*" && endlocal && set "ext1=%ext1:~0,2%" && set wcx=* && goto :eof
 if "%ext1:~3,1%"=="*" && endlocal && set "ext1=%ext1:~0,3%" && set wcx=* && goto :eof
@@ -576,6 +577,7 @@ pause --wait=0 "%cd%" > (md)%mdmem%+1
 if not exist LFN && if %ydirlen%>=13 && set ydir=%ydir:~-13,13% && set ydirlen=13 ! if exist LFN && if %ydirlen%>=16 && set ydir=%ydir:~-16,16% && set ydirlen=16
 set argfound=
 set skip=1 && call Fn.11 "%cd%" "/" && cat --locate=\x2F (md)%mdmem%+1 > nul &; set /a skip=%?%+1 > nul
+#BAD#set skip=1 && call Fn.11 "%cd%" "/" > nul && cat --locate=\x2F (md)%mdmem%+1 > nul &; set /a skip=%?%+1 > nul
 cat --skip=%skip% --locatei="%ydir%" (md)%mdmem%+1 > nul && set argfound=Y ! set argfound=N
 #DEBUG#echo %0 cd=%cd% ydir=%ydir% ydirlen=%ydirlen% skip=%skip% argfound=%argfound% && cat --hex --skip=%skip% --length=16 (md)%mdmem%+1
 if not "%y:~1,1%"=="-" && if %argfound%==N && endlocal && set "gotomsg=%message1%" && goto :eof
@@ -598,12 +600,13 @@ echo -n > (md)%mdmem%+1
 write (md)%mdmem%+1 %cd%\0 > nul
 ## In case of /-y: ('-' NOW possible on first position!) Works on (hd1,0) met /-y:windows, '*' makes no difference; max 8+3 chars (and '.')
 #OLD# In case of /y:- ('-' not possible on first position!) Works on (hd1,0) met /y:-windows, '*' makes no difference; max 8+3 chars (and '.')
-if exist name1 &; if exist LFN && if %ydirlen%>=17 && set ydir=%ydir:~0,16% && set ydirlen=16 ! if %ydirlen%>=9 && set ydir=%ydir:~0,8% && set ydirlen=8
-if exist ext1 &; if exist LFN && if %ydirlen%>=17 && set ydir=%ydir:~0,16% && set ydirlen=16 ! if %ydirlen%>=5 && set ydir=%ydir:~0,4% && set ydirlen=4
+if exist LFN && if %ydirlen%>=17 && set ydir=%ydir:~0,16% && set ydirlen=16 ! if exist name1 && if %ydirlen%>=9 && set ydir=%ydir:~0,8% && set ydirlen=8 ! if exist ext1 && if %ydirlen%>=5 && set ydir=%ydir:~0,4% && set ydirlen=4
 set "argfound=N"
 set skip=0 && call Fn.11 "%cd%" "/" > nul && cat --locate=\x2F (md)%mdmem%+1 > nul &; set /a skip=%?%+1 > nul
-cat --skip=%skip% --locatei=%ydir% --length=%ydirlen% (md)%mdmem%+1 > nul && set argfound=
-cat --skip=%skip% --locatei=%ydir% --length=%ydirlen% (md)%mdmem%+1 > nul && set argfound=
+if exist ext1 && cat --locate=. (md)%mdmem%+1 > nul &; set /a skip=%?% > nul
+if exist ydir && cat --skip=%skip% --locatei=%ydir% --length=%ydirlen% (md)%mdmem%+1 > nul && set argfound=
+#DEBUG#if exist ydir && echo %0 ydir=%ydir% skip=%skip% ydirlen=%ydirlen% cd=%cd% argfound=%argfound% && cat --hex --length=16 (md)%mdmem%+1
+if not exist ydir && echo %0 cd=%cd% argfound=%argfound%
 if %argfound%==N && endlocal && set "gotomsg=%message1%" && goto :eof
 endlocal && set gotomsg= && goto :eof
 goto :eof
@@ -738,13 +741,13 @@ set clusnum=2 && set sfnpath=/ && cat (md)%mdbase%+1 | call :finddirectory
 endlocal && set clusnum=%clusnum% && set bytedone=%bytedone% && set dirlen=%dirlen% && set entry=%entry% && set sfnfile=%sfnfile% && set sfnpath=%sfnpath% && set lfnentry=%lfnentry%
 goto :eof
 ::
-:lsspaces
+#NOTNEEDED#:lsspaces
 #-# replace spaces for ls-spaces: '\ '
 setlocal && set * && set mdbase=%mdmem%
 set numspace= && set skip=0
 cat --locate=\x20 (md)%mdbase%+1 > nul ;; set /a numspace=%@retval% > nul
 if %numspace%==0 && endlocal && goto :eof
-:looplsspaces
+#NOTNEEDED#:looplsspaces
 cat --skip=%skip% --locate=\x20 --number=1 (md)%mdbase%+1 > nul &; set /a skip=%?% > nul
 set /A seek=%skip%+1 > nul
 raw dd if=(md)%mdbase%+1 of=(md)%mdbase%+1 bs=1 skip=%skip% seek=%seek% > nul
@@ -858,7 +861,8 @@ if not "%~3"=="" && if not "%~3"=="getlfn" && set "lfn=%~3"
 if not exist lfn && ATTRIBFT.LLL getlfn "%~1" &; if exist result && set "lfn=%result%" && set result= &; if "%~3"=="getlfn" && endlocal && set "lfn=%lfn%" && goto :eof
 #NOT#if exist lfn && if not exist r && ATTRIBFT.LLL isreadonly "%~1" &; if not exist result && set delagain=Y ! set delagain=N
 #NOT#if exist lfn && if %r%==r && set delagain=Y
-if exist lfn && echo %act%del %~2 LFN:$[0x00]"$[]%lfn%  $[0x08]%argname%%%argext%$[0x00]" %NULL% && set /a lfndel=%lfndel%+1 > nul
+if exist lfn && echo %act%del %~2 LFN:$[0x00]"$[]%lfn%$[0x00]" %NULL% && set /a lfndel=%lfndel%+1 > nul
+#OLD#if exist lfn && echo %act%del %~2 LFN:$[0x00]"$[]%lfn%  $[0x08]%argname%%%argext%$[0x00]" %NULL% && set /a lfndel=%lfndel%+1 > nul
 if not %t%==/t && if exist lfn && ATTRIBFT.LLL dellfn "%device%%%path%%%lfn%" &; if exist message && echo $[0x00]"$[]%message%$[0x00]" && set /a lfndelsk=%lfndelsk%+1 > nul && set /a lfndel=%lfndel%-1 > nul
 endlocal && set lfndel=%lfndel% && set lfndelsk=%lfndelsk%
 goto :eof
@@ -885,7 +889,7 @@ if %~1==smallhelp && echo Example FATDEL.G4B (fd0)/SOMEDIR/ /a:rsh-d /s /r
 if %~1==smallhelp && echo Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
 if %~1==smallhelp && echo Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t && goto :eof
 clear ;; pager on
-echo FATDEL.G4B v0.3 (20241010), by deomsh
+echo FATDEL.G4B v0.3 (20241012), by deomsh
 echo Function: frontend for Grubutil 'FAT', function 'del'
 echo FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
 echo FATDEL.G4B /? (this screen) && echo
@@ -893,9 +897,9 @@ echo --mdbase=sector => changes (md)-startsector in use (default=0x3000-0x3FFF)*
 echo * Except: <0x3000, 0x3001-0xD460, 0x12000-0x12FFF
 echo DEVICE = (fd#) & (hd#,#) & (0x#) & (#); FAT only!
 echo /PATH/ = starting directory => without PATH => on ROOT
-echo Last DIR in PATH accepts wildcard: '*' in Name and Extension (NOT: '?' )
+echo Last DIR in PATH accepts wildcard: '*' in Name and Extension both (NOT: '?')
 echo FILENAME[.EXT] = del specified file => on ROOT without /PATH/
-echo FILENAME[.EXT] accepts wildcard: '*' in Name and Extension (NOT: '?' )
+echo FILENAME[.EXT] accepts wildcard: '*' in Name and Extension (NOT: '?')
 echo Without FILENAME[.EXT] full directory will be deleted (*.* is NOT needed)* && echo
 echo General Switches: /s /p /q /t /[-]x:~ /[-]y:~ /[-]r /z /lfn
 echo /s = delete subdirectories (LFN as SFN) too *
@@ -911,7 +915,7 @@ echo * Without FILENAME.EXT empty start-directory will be deleted (like DELTREE)
 echo * With /s and *.* as FILENAME.EXT, empty start-directory will not be deleted!
 echo **  Default verbose del: del and output messages too
 echo 3* Instead of '~' other chars: max full 8.3 filename (with /lfn max 16 chars)
-echo $[]    /[-]y:~ can NOT filter PATH, if wildcard ends last directory of PATH
+echo $[]    /[-]y:~ can NOT filter PATH, if wildcard(s) in last directory of PATH
 echo 4* If spaces or '=' on command-line use double quotes or escaped '\ ' or '\=' && echo
 echo FAT Directory Parser Switches*: /a:[-]darsh
 echo /a:[-]d[-]a[-]r[-]s[-]h = [not] delete files/directories with attribute(s) *
@@ -921,13 +925,13 @@ echo /a:[-]d[-]a[-]r[-]s[-]h = [not] delete files/directories with attribute(s) 
 echo *  About max 35 000 files and 3 000 subdirectories in one directory
 echo ** Attributes are not shown by FAT
 echo ** FAT cannot delete read-only files and read-only directories: dialog or if /r is set
-echo ** With /a:d only empty directories will be deleted (fake all with /s /t) && echo
+echo ** With /a:d only empty directories will be deleted (but all faked with /s /t) && echo
 echo Remarks:
 echo Delete files on DEVICE; DEVICE is mandatory for safety reasons!
 echo Delete on hidden partitions too!
 echo Without /lfn: 8+3 file-names only, SFN of Long File Names deleted, LFN not!
 echo Arguments space-separated! Switches: lower/uppercase free
-echo FAT needed, searched: %~dp0, (bd), ROOT, or in /, /boot/grub/, /grub/, /g4dll/
+echo FAT needed, searched: %^~dp0, (bd), ROOT, or in /, /boot/grub/, /grub/, /g4dll/
 echo File versions: Grubutil FAT >=15/02/2015, Grub4Dos 0.4.6a
 echo $[] On FAT32 partition >= 4GB use Grubutil FAT from 2023, april or later
 echo Switch /lfn: Loosely Linked Library ATTRIBFT.LLL, in same folder as FATDEL.G4B
