@@ -63,7 +63,7 @@ Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t</code></pre>
 
 #### ATTRIBFT.LLL
 
-Concept of 'Loosely Linked Library' is courtesy of Wonko the Sane (Jaclaz)  
+Concept of 'Loosely Linked Library' is an idea of Wonko the Sane (Jaclaz)  
 More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
 
 ### HISTORY
