@@ -1,5 +1,5 @@
 !BAT
-#-#+ FATDEL.G4B v0.3 (20241012), by deomsh. Based on copyFF.bat (:cpa & :copyfiles & :sub-dir => originator of call's seems to be Chenall)
+#-#+ FATDEL.G4B v0.3.1 (20241018), by deomsh. Based on copyFF.bat (:cpa & :copyfiles & :sub-dir => originator of call's seems to be Chenall)
 if "%~1"=="" && call :help "smallhelp" && goto :eof
 setlocal && set *
 debug status | set debugsts= ;; set "debugsts=%debugsts:~-1,1%" ;; debug 1 ;; debug msg=1
@@ -642,7 +642,7 @@ set ext=%~x1
 set mdbase=%mdmem%
 set basemem=%mdbase% * 0x200
 if not exist filesys && call :filesystem "%device%" &; if not /i %filesys:~0,3%==fat && endlocal && set result= && goto :eof
-if not exist output && call :bootblockbase "%device%"
+if not exist output && call :bootblockbase "%device%" &; if %result%==0 && endlocal && set result= && goto :eof ! set result=
 call :findpath "%path%"
 if %clusnum%==0 && endlocal && set result= && goto :eof
 call :findfile "%name%%%ext%" &; if not exist entry && endlocal && set result= && goto :eof
@@ -801,6 +801,8 @@ set /A address=%base%+0xE > nul
 read %address% > nul ;; set /A reserved=%@retval%&0xffff > nul
 set /A address=%base%+0x10 > nul
 read %address% > nul ;; set /A numfats=%@retval%&0xff > nul
+if not %numfats%>=1 && endlocal && echo Abort: number of fat's is zero && set result=0 && goto :eof
+if %numfats%>=3 && endlocal && echo Abort: %numfats% File Allocation Tables unsupported && set result=0 && goto :eof
 set /A address=%base%+0x11 > nul
 read %address% > nul ;; set /A rootentr=%@retval%&0xffff > nul
 set /A address=%base%+0x13 > nul
@@ -889,7 +891,7 @@ if %~1==smallhelp && echo Example FATDEL.G4B (fd0)/SOMEDIR/ /a:rsh-d /s /r
 if %~1==smallhelp && echo Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
 if %~1==smallhelp && echo Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t && goto :eof
 clear ;; pager on
-echo FATDEL.G4B v0.3 (20241012), by deomsh
+echo FATDEL.G4B v0.3.1 (20241018), by deomsh
 echo Function: frontend for Grubutil 'FAT', function 'del'
 echo FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
 echo FATDEL.G4B /? (this screen) && echo
