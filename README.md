@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.3 (20241012)
+## FATDEL.G4B v0.3.1 (20241018)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -67,6 +67,9 @@ Concept of 'Loosely Linked Library' is courtesy of Wonko the Sane (Jaclaz)
 More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
 
 ### HISTORY
+Version 0.3.1  
+NEW: deleting read-only files compatible with one File Allocation Table (number of FAT's = 1)  
+
 Version 0.3  
 First published version
 
