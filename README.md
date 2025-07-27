@@ -7,9 +7,9 @@ FATDEL.G4B /? (this text)
 * Except: <0x3000, 0x3001-0xD460, 0x12000-0x12FFF
 DEVICE = (fd#) & (hd#,#) & (0x#) & (#); FAT only!
 /PATH/ = starting directory => without PATH => on ROOT
-Last DIR in PATH accepts wildcard: '*' in Name and Extension both (NOT: '?' )
+Last DIR in PATH accepts wildcard: '*' in Name and in Extension both (NOT: '?' )
 FILENAME[.EXT] = del specified file => on ROOT without /PATH/
-FILENAME[.EXT] accepts wildcard: '*' in Name and Extension (NOT: '?' )
+FILENAME[.EXT] accepts wildcard: '*' in Name and in Extension both (NOT: '?' )
 Without FILENAME[.EXT] full directory will be deleted (*.* is NOT needed)*
 
 General Switches: /s /p /q /t /[-]x:~ /[-]y:~ /[-]r /z /lfn
@@ -60,6 +60,8 @@ Example FATDEL.G4B (fd0)/IO.SYS /r
 Example FATDEL.G4B (fd0)/SOMEDIR/ /a:-drsh /s
 Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
 Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t</code></pre>    
+Example FATDEL.G4B (fd0)/SOMEDI*/ /s /t
+Example FATDEL.G4B (fd0)/SOMEDI*.EX*/ /s
 
 #### ATTRIBFT.LLL
 
