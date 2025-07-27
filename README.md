@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.3.1 (20241018)
+## FATDEL.G4B v0.4 (20250727)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -67,6 +67,13 @@ Concept of 'Loosely Linked Library' is an idea of Wonko the Sane (Jaclaz)
 More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
 
 ### HISTORY
+Version 0.4  
+NEW: 'fat' (and ATTRIBFT.LLL if used) not unloaded afterwards if already loaded with insmod  
+AddExit: debug msg=3  
+BUGFIX: not deleting empty directories with wildcard(s) last in PATH with /s  
+BUGFIX: not deleting empty LFN-directories with/ without /s  
+NEW: Check Grub4dos version >=20170505  
+
 Version 0.3.1  
 NEW: deleting read-only files compatible with one File Allocation Table (number of FAT's = 1)  
 
