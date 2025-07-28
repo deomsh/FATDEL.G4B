@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.4 (20250727)
+## FATDEL.G4B v0.4 (20250729)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -42,7 +42,7 @@ Delete on hidden partitions too!
 Without /lfn: 8+3 file-names only, SFN of Long File Names deleted, LFN not!
 Arguments space-separated! Switches: lower/uppercase free
 FAT needed, searched: %~dp0, (bd), ROOT, or in /, /boot/grub/, /grub/, /g4dll/
-File versions: Grubutil FAT >=15/02/2015, Grub4Dos 0.4.6a
+File versions: Grubutil FAT >=15/02/2015, Grub4Dos 0.4.6a >=05/05/2017
  On FAT32 partition >= 4GB use Grubutil FAT from 2023, april or later
 Switch /lfn: Loosely Linked Library ATTRIBFT.LLL needed, in same folder as FATDEL.G4B
 Grub4dos for UEFI: compatible, but soon 'Out of malloc memory' errors
@@ -71,10 +71,16 @@ More information and download: https://github.com/deomsh/ATTRIBFT.LLL
 ### HISTORY
 Version 0.4  
 NEW: 'fat' (and ATTRIBFT.LLL if used) not unloaded afterwards if already loaded with insmod  
-AddExit: debug msg=3  
+NEW: separate test of forbidden chars/ filenames on command-line  
+NEW: if ATTRIBFT.LLL is found & loaded set auto-switch /LFN, unless (new) switch /-LFN is used  
+NEW: if wildcard * is used in FILE no limit to NAME-/ EXTENSION-length  
+NEW: if wildcard * is used in last DIR in PATH no limit to DIRECTORY-length  
+NEW: compatible with grub4dos operators (unless forbidden chars)  
+NEW: Check Grub4dos version >=20170505  
+BUGFIX: not deleting FILE if FILE is SFN and LFN exists  
 BUGFIX: not deleting empty directories with wildcard(s) last in PATH with /s  
 BUGFIX: not deleting empty LFN-directories with/ without /s  
-NEW: Check Grub4dos version >=20170505  
+Add2Exit: debug msg=3  
 
 Version 0.3.1  
 NEW: deleting read-only files compatible with one File Allocation Table (number of FAT's = 1)  
