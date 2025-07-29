@@ -28,7 +28,8 @@ General Switches: /s /p /q /t /[-]x:~ /[-]y:~ /[-]r /z /lfn
 3* Instead of '~' other chars: max full 8.3 filename (with /lfn max 16 chars)
     /[-]y:~ can NOT filter PATH, if wildcard(s) are in last directory of PATH
 4* If spaces or '=' on command-line use double quotes or escaped '\ ' or '\='
-
+4* Switch /LFN is auto-set if ATTRIBFT.LLL is found or loaded already
+    
 FAT Directory Parser Switches*: /a:[-]darsh
 /a:[-]d[-]a[-]r[-]s[-]h = [not] delete files/directories with attribute(s) *
 *  About max 35 000 files and 3 000 subdirectories in one directory
@@ -59,9 +60,9 @@ Example FATDEL.G4B (fd0)/IO.SYS
 Example FATDEL.G4B (fd0)/IO.SYS /r
 Example FATDEL.G4B (fd0)/SOMEDIR/ /a:-drsh /s
 Example FATDEL.G4B "(hd0,0)/Long Directory/" /lfn
-Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t</code></pre>    
+Example FATDEL.G4B (hd0,0)/Long\ Directory\ with\ \=/ /lfn /s /t
 Example FATDEL.G4B (fd0)/SOMEDI*/ /s /t
-Example FATDEL.G4B (fd0)/SOMEDI*.EX*/ /s
+Example FATDEL.G4B (fd0)/SOMEDI*.EX*/ /-LFN /s /t</code></pre>    
 
 #### ATTRIBFT.LLL
 
@@ -89,6 +90,7 @@ Version 0.3
 First published version
 
 ### SCREENSHOTS
+![TEXTSTAT G4B FATDEL G4B](https://github.com/user-attachments/assets/a17662d0-7b0f-4659-8b1b-bfd9c984bb64)
 
 Example of trial-deleting all files in a directory with switch /t. Also use of asterisk-wildcard. And confirm-dialog if really deleting all files in a directory  
 
@@ -107,13 +109,24 @@ Examples of deleting read-only files with dialog or with switch /r. Als showed w
 ![FATDEL G4B examples of deleting read-only files with dialog or with switch -r AND with attributes in switch -a=sh and -a=r III](https://github.com/user-attachments/assets/9ea7c3f7-10f5-4567-aae3-b49ef1d6df83)
 
 Example of use of switch /lfn, with trial del /s and /y:sys
+BTW from V0.4 auto-switch /LFN if ATTRIBFt.LLL is found or loaded already
 
 ![FATDEL G4B trial del with switch -lfn and -s and -y=sys](https://github.com/user-attachments/assets/fd193f3d-e4f9-4f9c-b249-89fe06da5487)
 
 Example of use of switch /lfn with spaces or '=' on command-line (trial del). Watch case of missing extension wildcard in the middle of the print-screen (filesize 0!)
+BTW from V0.4 auto-switch /LFN if ATTRIBFt.LLL is found or loaded already
 
 ![FATDEL G4B use of switch -lfn with spaces or '=' on command-line](https://github.com/user-attachments/assets/7fea6c7c-968b-4b4c-95b4-dec9d063337e)
 
 Speed of del: looptest of deleting 1459 files, without and with switch /lfn (in Windows 10 about 5 seconds)
+BTW from V0.4 auto-switch /LFN if ATTRIBFt.LLL is found or loaded already
 
 ![FATDEL G4B looptest of deleting 1459 files, without and with switch -lfn (in Windows 10 5 seconds)](https://github.com/user-attachments/assets/da1c00a3-bbb7-4183-a174-6ca28ef6af3d)
+
+Example using *-wildcard in last Directory in Path with switch /s to delete subdirectories and trial-DEL with switch /t (auto-switch /LFN if ATTRIBFt.LLL is found or loaded already)
+
+![FATDEL G4B Example with asterisk-wildcard in last dir in path with -t and -s   auto-LFN](https://github.com/user-attachments/assets/7851bbcb-513f-4315-a5e5-3e1d0c4f0b4b)
+
+Example using *-wildcard in Name-part and Extension both in last Directory in Path with switch /s to delete subdirectories and trial-DEL with switch /t (auto-switch /LFN if ATTRIBFt.LLL is found or loaded already). Also showed with switch /-LFN: Long File Names are not deleted (like MS-DOS in real-mode)
+
+![FATDEL G4B Example with asterisk-wildcard AND in name-part and in extension-part in last dir in path with -t and -s   auto-LFN AND with --LFN](https://github.com/user-attachments/assets/27edcd65-c23e-46d1-90ab-2d4539de1a25)
