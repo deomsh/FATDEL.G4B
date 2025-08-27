@@ -70,7 +70,7 @@ Concept of 'Loosely Linked Library' is an idea of Wonko the Sane (Jaclaz)
 More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
 
 ### HISTORY
-Version 0.5.1  
+Version 0.4.1  
 BUGFIX: not compatible with partitions >= ~256GB  
 
 Version 0.4  
