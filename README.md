@@ -1,4 +1,4 @@
-## FATDEL.G4B v0.4 (20250729)
+## FATDEL.G4B v0.4.1 (20250827)
 
 <pre><code>Function: frontend for Grubutil 'FAT', function 'del'
 FATDEL.G4B [--mdbase=sector] DEVICE[/PATH][/FILENAME[.EXT]] switches
@@ -70,6 +70,9 @@ Concept of 'Loosely Linked Library' is an idea of Wonko the Sane (Jaclaz)
 More information and download: https://github.com/deomsh/ATTRIBFT.LLL  
 
 ### HISTORY
+Version 0.5.1  
+BUGFIX: not compatible with partitions >= ~256GB  
+
 Version 0.4  
 NEW: 'fat' (and ATTRIBFT.LLL if used) not unloaded afterwards if already loaded with insmod  
 NEW: separate test of forbidden chars/ filenames on command-line  
@@ -90,7 +93,7 @@ Version 0.3
 First published version
 
 ### SCREENSHOTS
-![TEXTSTAT G4B FATDEL G4B](https://github.com/user-attachments/assets/a17662d0-7b0f-4659-8b1b-bfd9c984bb64)
+![TEXTSTAT G4B FATDEL G4B version 0 4 1 after cleaning](https://github.com/user-attachments/assets/6fb0b9af-6207-4d0d-ac67-01a57fcb80f8)
 
 Example of trial-deleting all files in a directory with switch /t. Also use of asterisk-wildcard. And confirm-dialog if really deleting all files in a directory  
 
